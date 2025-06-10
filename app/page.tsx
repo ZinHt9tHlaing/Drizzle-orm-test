@@ -1,3 +1,4 @@
+import CustomButton from "@/components/custom-button";
 import { createTodo, readTodo } from "@/server/actions";
 
 export default async function Home() {
@@ -13,14 +14,14 @@ export default async function Home() {
           {todo.title}
         </p>
       ))}
-      <div>
+      <div className="mt-2">
         <form action={createTodo}>
           <input
             type="text"
             name="todoTitle"
             className="bg-transparent border-2 border-white"
           />
-          <button type="submit">Add new todo</button>
+          <CustomButton label="Add new todo" />
         </form>
       </div>
     </main>
