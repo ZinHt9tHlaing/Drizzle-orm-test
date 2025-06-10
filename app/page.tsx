@@ -1,43 +1,25 @@
-import CustomButton from "@/components/custom-button";
-import { createTodo, deleteTodo, readTodo } from "@/server/actions";
-import Link from "next/link";
+import BlogCards from "@/components/blog-cards";
+import { getPosts } from "@/server/actions";
 
 export default async function Home() {
-  const { error, success } = await readTodo();
+  const { error, success } = await getPosts();
 
   if (error) throw new Error(error);
 
   return (
-    <main>
-      <h1 className="text-xl font-bold">Todos</h1>
-      {success?.map((todo) => (
-        <div key={todo.id} className="flex items-center gap-2">
-          <p>{todo.title}</p>
-          <form action={deleteTodo}>
-            <input type="text" name="id" value={todo.id} hidden readOnly />
-            <button type="submit" className="text-red-600 underline">
-              Delete
-            </button>
-          </form>
-          <Link
-            href={`/update/${todo.id}`}
-            className="underline text-green-500"
-          >
-            Edit
-          </Link>
-        </div>
+    <main className="mt-4">
+      <h1 className="title-text">Recent Blogs</h1>
+      {success?.length === 0 && (
+        <p className="text-sm font-medium">No posts to show.</p>
+      )}
+      {success?.map((post) => (
+        <BlogCards
+          key={post.id}
+          id={post.id}
+          title={post.title}
+          description={post.description}
+        />
       ))}
-      <div className="mt-2">
-        <form action={createTodo}>
-          <input
-            type="text"
-            name="todoTitle"
-            required
-            className="bg-transparent border-2 border-white"
-          />
-          <CustomButton label="Add new todo" />
-        </form>
-      </div>
     </main>
   );
 }

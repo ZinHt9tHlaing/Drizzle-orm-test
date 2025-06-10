@@ -1,5 +1,5 @@
 import CustomButton from "@/components/custom-button";
-import { updateTodo } from "@/server/actions";
+import { getDetailPost, updateTodo } from "@/server/actions";
 import React from "react";
 
 type ParamProps = {
@@ -8,19 +8,35 @@ type ParamProps = {
   };
 };
 
-const EditTodo = ({ params }: ParamProps) => {
+const EditTodo = async ({ params }: ParamProps) => {
+  const { title, description } = await getDetailPost(Number(params.id));
+
   return (
-    <main>
-      <h1>Update Todo</h1>
-      <form action={updateTodo} className="flex gap-2">
+    <main className="mt-4">
+      <h2 className="title-text">Update todo</h2>
+      <form action={updateTodo}>
         <input type="text" name="id" value={params.id} readOnly hidden />
-        <input
-          type="text"
-          name="todoTitle"
-          required
-          className="bg-transparent border-2 border-white"
-        />
-        <CustomButton label="Update todo" />
+        <div className="space-y-4 mt-4">
+          <input
+            type="text"
+            name="title"
+            placeholder="title..."
+            defaultValue={title}
+            required
+            className="bg-transparent border-2 w-full border-blue-600 px-2 py-1 rounded focus:outline-none focus:border-[3px] duration-100"
+          />
+          <textarea
+            name="description"
+            placeholder="description..."
+            defaultValue={description}
+            rows={4}
+            required
+            className="block w-full bg-transparent border-2 border-blue-600 px-2 py-1 rounded scroll-smooth focus:outline-none focus:border-[3px] duration-100"
+          />
+        </div>
+        <div className="flex justify-start md:justify-end">
+          <CustomButton label="Update todo" />
+        </div>
       </form>
     </main>
   );
